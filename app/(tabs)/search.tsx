@@ -3,14 +3,24 @@ import { SearchBar } from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
+import { updateSearchCount } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
 export default function Saved() {
-  const [searchQuery, setSearchQuery] = useState<string>("")
+   const [searchQuery, setSearchQuery] = useState<string>("")
+
+   const handleSubmit = async () => {
+     if (searchQuery.trim()) {
+       await loadMovies()
+       if (movies?.length > 0 && movies?.[0]) {
+         await updateSearchCount(searchQuery, movies[0])
+       }
+     }
+   }
         const {
-            data: movies ,
+            data: movies = [],
             loading: moviesLoading,
             error: moviesError,
             refetch: loadMovies,
@@ -23,6 +33,8 @@ export default function Saved() {
           const timeoutId = setTimeout( async() => {
             if(searchQuery.trim()){
               await loadMovies()
+              if(movies?.length > 0 && movies?.[0])
+                await updateSearchCount(searchQuery, movies[0])
             }
             else{
               reset()
@@ -30,7 +42,7 @@ export default function Saved() {
           }, 500);
 
           return()=> clearTimeout(timeoutId)
-          
+
         }, [searchQuery])
 
   return (
@@ -71,6 +83,7 @@ export default function Saved() {
         <SearchBar
         value={searchQuery}
         onChangeText={(text: string)=>setSearchQuery(text) }
+        onSubmit={handleSubmit}
         placeholder="Search for Movies ..."
         />
       </View>

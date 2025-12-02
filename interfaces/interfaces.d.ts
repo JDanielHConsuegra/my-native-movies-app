@@ -1,5 +1,5 @@
 interface Movie {
-  id: number;
+  id?: number;
   title: string;
   adult: boolean;
   backdrop_path: string;
@@ -17,7 +17,7 @@ interface Movie {
 
 interface TrendingMovie {
   searchTerm: string;
-  movie_id: number;
+  movie_id?: number;
   title: string;
   count: number;
   poster_url: string;
