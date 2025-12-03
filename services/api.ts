@@ -29,17 +29,18 @@ return data.results
 
 }
 
-// const url = 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc';
-// const options = {
-//   method: 'GET',
-//   headers: {
-//     accept: 'application/json',
-//     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzOTU5YTE1ZTZiOTA5YWNmYzI4ZTUzZTI3MDBiYThkZSIsIm5iZiI6MTc2NDA5MDI3Ny4xMDcsInN1YiI6IjY5MjVlMWE1OGIyYjcxNjM2YTI2YmFmOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.rjuwOuAuxGPKKI0i4RTC2Fiogun8h4RdlHEnaQaMxwE'
-//   }
-// };
+export const fetchMovieDetails = async ({movieId}: {movieId: string}): Promise<MovieDetails> => {
+    const endpoint = `${TMDB_CONFIG.BASE_URL}/movie/${movieId}?api_key=${TMDB_CONFIG.API_KEY}`
+    const res = await fetch(endpoint, {
+        method: "GET",
+        headers: TMDB_CONFIG.headers
+    })
 
-// fetch(url, options)
-//   .then(res => res.json())
-//   .then(json => console.log(json))
-//   .catch(err => console.error(err));
+    if (!res.ok){
+        throw new Error("failed to fetch the movie details this time")
+    }
+
+    const data = await res.json()
+    return data
+}
 
