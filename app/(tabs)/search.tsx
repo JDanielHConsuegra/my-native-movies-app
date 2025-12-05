@@ -39,7 +39,7 @@ export default function Saved() {
             else{
               reset()
             }
-          }, 500);
+          }, 700);
 
           return()=> clearTimeout(timeoutId)
 
@@ -63,7 +63,7 @@ export default function Saved() {
         </View>
       ) : null
     }
-    numColumns={3}
+    numColumns={3} 
     columnWrapperStyle={{
       justifyContent:"center",
       gap:16,
@@ -76,7 +76,7 @@ export default function Saved() {
       <View className="w-full flex-row justify-center mt-20">
       <Image
       source={icons.logo}
-      className="w-12 h-10"
+      className="size-12 "
       />
       </View>
       <View className="my-5">

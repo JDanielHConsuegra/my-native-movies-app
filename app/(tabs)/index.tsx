@@ -30,6 +30,7 @@ export default function Index() {
       <Image
       source={images.bg}
       className="absolute w-full z-0"
+      tintColor={"1C1C1C"}
       />
       <ScrollView
       className="flex-1 px-5"
@@ -41,7 +42,7 @@ export default function Index() {
       >
         <Image
         source={icons.logo}
-        className="w-12 h-10 mt-20 mb-5 mx-auto"
+        className="size-12 mt-[64px] mb-5 mx-auto"
         />
 
       {
@@ -76,7 +77,6 @@ export default function Index() {
               )}
               horizontal
               showsHorizontalScrollIndicator={false}
-
               contentContainerStyle={{
                 gap: 20,
                 paddingRight: 5
@@ -97,13 +97,13 @@ export default function Index() {
             />
         )}
         keyExtractor={(item)=> item.id.toString()}
-        numColumns={3}
+        numColumns={3} 
         columnWrapperStyle={{
             display: "flex",
             justifyContent: "center",
-            gap: 20,
+            gap: 15,
             paddingRight: 5,
-            marginBottom: 10
+            marginBottom: 20
         }}
         className="mt-2 w-full pb-32"
         scrollEnabled={false}

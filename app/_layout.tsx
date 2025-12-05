@@ -1,12 +1,14 @@
 import "react-native-url-polyfill/auto";
 
+import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { Stack } from "expo-router";
 import { StatusBar } from "react-native";
 import "../globals.css";
 
 export default function RootLayout() {
   return <>
-  <StatusBar hidden={true} /> 
+  <StatusBar hidden={true} />
+  <FavoritesProvider>
   <Stack>
     <StatusBar hidden/>
     <Stack.Screen
@@ -34,5 +36,6 @@ export default function RootLayout() {
         }}
       />
   </Stack>;
+      </FavoritesProvider> 
   </> 
 }

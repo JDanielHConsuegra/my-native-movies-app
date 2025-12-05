@@ -1,12 +1,33 @@
 import { icons } from "@/constants/icons";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import { fetchMovieDetails } from "@/services/api";
 import useFetch from "@/services/useFetch";
 import { router, useLocalSearchParams } from "expo-router";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function Details(){
 
     const {id} = useLocalSearchParams()
+    const [alertMessage, setAlertMessage] = useState<string | null>(null)
+    const fadeAnim = useRef(new Animated.Value(0)).current
+    const { isFavorite, toggleFavorite } = useFavorites();
+
+    useEffect(() => {
+      if (alertMessage) {
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      }
+    }, [alertMessage]);
 
     const {data:movie, loading} = useFetch(()=>fetchMovieDetails({movieId: id as string}))
     console.log("pelicula que me llega", movie);
@@ -28,6 +49,10 @@ export default function Details(){
     }
     
     return (
+        <>
+        <Animated.View style={{position: 'absolute', top: 50, left: 20, right: 20, backgroundColor: 'rgba(0,0,0,0.8)', padding: 10, borderRadius: 5, zIndex: 1000, opacity: fadeAnim}}>
+          <Text style={{color: 'white', textAlign: 'center', fontSize: 14}}>{alertMessage || ''}</Text>
+        </Animated.View>
         <View className="bg-primary flex-1">
             <ScrollView contentContainerStyle={{paddingBottom:100}}>
         <View>
@@ -36,6 +61,32 @@ export default function Details(){
             className="w-full h-[550px] "
             resizeMode="stretch"
             />
+            {/* touchable que guarda peliculas */}
+            <TouchableOpacity
+            className=" absolute bottom-5 right-5 p-2 rounded-full bg-primary"
+            onPress={async () => {
+              try {
+                await toggleFavorite(id as string);
+                const nowFav = isFavorite(id as string);
+                setAlertMessage(nowFav ? "Movie removed from saved" : "Movie saved");
+                setTimeout(() => setAlertMessage(null), 2000);
+              } catch (error: any) {
+                console.log("Error saving movie:", error);
+                if (error.message && error.message.includes("not authenticated")) {
+                  setAlertMessage("Please log in to save movies");
+                } else {
+                  setAlertMessage("Error saving movie");
+                }
+                setTimeout(() => setAlertMessage(null), 2000);
+              }
+            }}
+            >
+            <Image
+            source={icons.save}
+            className="size-8"
+            tintColor={isFavorite(id as string) ? "#ff0000" : "#808080"}
+            />
+            </TouchableOpacity>
         </View>
         <View className="flex-col items-start justify-center mt-5 px-5">
         <Text className="text-white font-bold text-xl">{movie?.title} </Text>
@@ -87,5 +138,6 @@ export default function Details(){
         <Text className="text-white font-bold">Back to Home</Text>
         </TouchableOpacity>
         </View>
+        </>
     )
 }

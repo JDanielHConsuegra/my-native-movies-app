@@ -16,7 +16,7 @@ export const SearchBar = ({onPress, placeholder, value, onChangeText, onSubmit}:
             source={icons.search}
             className="size-5"
             resizeMode="contain"
-            tintColor={"#ab8bff"}
+            tintColor={"#4A4A4A"}
             />
             <TextInput
             onPress={onPress}

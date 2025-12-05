@@ -28,7 +28,7 @@ export const TabIcon = ({ icon, title, focused }: TabIconProps) =>{
         :(
         <View className="size-full justify-center items-center mt-4 rounded-full" >
             <Image source={icon}
-                    tintColor={"#A8B5D8"}
+                    tintColor={"#4A4A4A"}
                     className="size-5"
             />
         </View>
