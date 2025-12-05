@@ -4,8 +4,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { loginUser } from '@/services/appwrite';
 import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
-import { ActivityIndicator, Button, Image, Text, TextInput, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { ActivityIndicator, Animated, Button, Image, Text, TextInput, View } from 'react-native';
 import * as Yup from 'yup';
 
 // 📌 Esquema de validación con Yup
@@ -20,6 +20,8 @@ const LoginSchema = Yup.object().shape({
 
 export default function LoginForm() {
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
   const { setUser } = useAuth();
   const router = useRouter();
 
@@ -36,9 +38,26 @@ export default function LoginForm() {
             name: userDoc.name,
             email: userDoc.email,
           };
-          await setUser(user);
+          setTimeout( async () => {
+            await setUser(user);
+          }, 800);
           console.log('Logged in user:', user);
-          router.replace('/(tabs)');
+          setShowAlert(true);
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 400,
+            useNativeDriver: true,
+          }).start();
+          setTimeout(() => {
+            Animated.timing(fadeAnim, {
+              toValue: 0,
+              duration: 400,
+              useNativeDriver: true,
+            }).start(() => {
+              setShowAlert(false);
+              router.replace('/(tabs)');
+            });
+          }, 400);
         } catch (error: any) {
           setLoginError(error.message || 'Error al iniciar sesión');
         } finally {
@@ -48,6 +67,14 @@ export default function LoginForm() {
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
         <View className="flex-1 px-8 bg-primary">
+          {showAlert && (
+            <Animated.View
+              className="absolute top-10 border border-light-200 rounded left-0 right-0 bg-gray-800 p-4 z-10"
+              style={{ opacity: fadeAnim }}
+            >
+              <Text className="text-white text-center">Login successful!</Text>
+            </Animated.View>
+          )}
           <Image
                 source={images.bg}
                 className="absolute w-full z-0"

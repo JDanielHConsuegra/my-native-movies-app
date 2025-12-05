@@ -1,9 +1,10 @@
 import { icons } from '@/constants/icons';
 import { images } from '@/constants/images';
+import { registerUser } from '@/services/appwrite';
 import { Link, useRouter } from 'expo-router';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
-import { ActivityIndicator, Button, Image, Text, TextInput, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { ActivityIndicator, Animated, Button, Image, Text, TextInput, View } from 'react-native';
 import * as Yup from 'yup';
 
 // 📌 Esquema de validación con Yup
@@ -21,6 +22,8 @@ const RegisterSchema = Yup.object().shape({
 
 export default function RegisterForm() {
   const [registerError, setRegisterError] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
   const router = useRouter();
 
   return (
@@ -28,12 +31,43 @@ export default function RegisterForm() {
       initialValues={{ name: '', email: '', password: '' }}
       validationSchema={RegisterSchema}
       onSubmit={async (values, { setSubmitting }) => {
-        console.log("Valores de registro", values);
-        
+        setRegisterError(null);
+        try {
+          await registerUser(values.name, values.email, values.password);
+          console.log("User registered successfully");
+          setShowAlert(true);
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true,
+          }).start();
+          setTimeout(() => {
+            Animated.timing(fadeAnim, {
+              toValue: 0,
+              duration: 200,
+              useNativeDriver: true,
+            }).start(() => {
+              setShowAlert(false);
+              router.replace('/login');
+            });
+          }, 400);
+        } catch (error: any) {
+          setRegisterError(error.message || 'Error registering user');
+        } finally {
+          setSubmitting(false);
+        }
       }}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
         <View className="flex-1 px-8 bg-primary">
+          {showAlert && (
+            <Animated.View
+              className="absolute border border-light-200 top-10 left-0 right-0 bg-gray-800 p-4 z-10"
+              style={{ opacity: fadeAnim }}
+            >
+              <Text className="text-white text-center">Registration successful!</Text>
+            </Animated.View>
+          )}
           <Image
                 source={images.bg}
                 className="absolute w-full z-0"
@@ -96,7 +130,7 @@ export default function RegisterForm() {
             {isSubmitting ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
-              <Button color={"#1e3a8a"} onPress={() => handleSubmit()} title="Log - in" />
+              <Button color={"#1e3a8a"} onPress={() => handleSubmit()} title="Register" />
             )}
           </View> 
           <Text className='text-light-100 mt-5 self-center'>You allready have an account? <Link className='font-bold underline' href='/login' >Login</Link></Text>

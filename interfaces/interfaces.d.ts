@@ -75,6 +75,7 @@ interface User {
   id: string;
   name: string;
   email: string;
+  favoriteMovies?: Movie[]
 }
 
 interface TrendingCardProps {

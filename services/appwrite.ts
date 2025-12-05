@@ -219,3 +219,39 @@ export const loginUser = async (email: string, password: string) => {
     throw error;
   }
 };
+
+export const registerUser = async (name: string, email: string, password: string) => {
+  try {
+    // Check if email already exists
+    const existingUser = await databases.listDocuments({
+      databaseId,
+      collectionId: usersCollectionId,
+      queries: [
+        Query.equal("email", email),
+      ],
+    });
+
+    if (existingUser.documents.length > 0) {
+      throw new Error("Email already registered");
+    }
+
+    // Create new user
+    const newUser = await databases.createDocument(
+      databaseId,
+      usersCollectionId,
+      ID.unique(),
+      {
+        name,
+        email,
+        password,
+        isActive: true,
+        favoriteMovies: [],
+      }
+    );
+
+    return newUser;
+  } catch (error) {
+    console.log("Error registering user:", error);
+    throw error;
+  }
+};

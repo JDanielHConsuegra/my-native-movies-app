@@ -1,5 +1,6 @@
 import { icons } from "@/constants/icons"
 import { images } from "@/constants/images"
+import { useLogged } from "@/hooks/logged"
 import { Tabs } from "expo-router"
 import { Image, ImageBackground, Text, View } from "react-native"
 
@@ -11,6 +12,7 @@ interface TabIconProps{
 }
 
  const TabIcon = ({ icon, title, focused }: TabIconProps) =>{
+    useLogged(); // Check if user is logged in
     return (
         <View >
         {
