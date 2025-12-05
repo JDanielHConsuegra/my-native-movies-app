@@ -36,7 +36,6 @@ export default function Profile() {
           </Text>
           <Text className="text-white text-lg mb-2">
             <Text className="font-bold">Email:</Text> {user?.email}
-          <Text>{user?.favoriteMovies?.length}</Text>
           </Text>
         </View>
 
