@@ -1,5 +1,6 @@
 import "react-native-url-polyfill/auto";
 
+import { AuthProvider } from "@/contexts/AuthContext";
 import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { Stack } from "expo-router";
 import { StatusBar } from "react-native";
@@ -8,6 +9,7 @@ import "../globals.css";
 export default function RootLayout() {
   return <>
   <StatusBar hidden={true} />
+  <AuthProvider>
   <FavoritesProvider>
   <Stack>
     <StatusBar hidden/>
@@ -30,12 +32,19 @@ export default function RootLayout() {
     }}
     />
     <Stack.Screen
+        name="(auth)"
+        options={{
+          headerShown: false,
+        }}
+      />
+    <Stack.Screen
         name="index"
         options={{
           headerShown: false,
         }}
       />
-  </Stack>;
-      </FavoritesProvider> 
-  </> 
+  </Stack>
+     </FavoritesProvider>
+     </AuthProvider>
+ </>
 }

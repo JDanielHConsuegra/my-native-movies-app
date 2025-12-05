@@ -6,6 +6,7 @@ import { fetchMovieDetails } from './api';
 const databaseId = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const collectionId = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const favoritesCollectionId = process.env.EXPO_PUBLIC_APPWRITE_FAVORITES_COLLECTION_ID!;
+const usersCollectionId = process.env.EXPO_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 
 // Configuración del cliente de Appwrite
 const client = new Client()
@@ -193,5 +194,28 @@ export const getFavoriteMovies = async (): Promise<Movie[]> => {
   } catch (error) {
     console.log("Error fetching favorite movies:", error);
     return [];
+  }
+};
+
+export const loginUser = async (email: string, password: string) => {
+  try {
+    const result = await databases.listDocuments({
+      databaseId,
+      collectionId: usersCollectionId,
+      queries: [
+        Query.equal("email", email),
+        Query.equal("password", password),
+        Query.equal("isActive", true),
+      ],
+    });
+
+    if (result.documents.length > 0) {
+      return result.documents[0];
+    } else {
+      throw new Error("Invalid credentials or account inactive");
+    }
+  } catch (error) {
+    console.log("Error logging in:", error);
+    throw error;
   }
 };

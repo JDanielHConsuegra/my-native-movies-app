@@ -71,6 +71,12 @@ interface MovieDetails {
   vote_count: number;
 }
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 interface TrendingCardProps {
   movie: TrendingMovie;
   index: number;

@@ -2,6 +2,7 @@ import { MovieCard } from "@/components/MovieCard";
 import { SearchBar } from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
+import { useLogged } from "@/hooks/logged";
 import { fetchMovies } from "@/services/api";
 import { getTrendingMovies } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
@@ -10,6 +11,7 @@ import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from "reac
 
 export default function Index() {
     const router = useRouter()
+    useLogged(); // Check if user is logged in
 
     const {
       data: trendingMovies,
