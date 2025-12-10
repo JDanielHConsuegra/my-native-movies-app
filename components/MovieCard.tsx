@@ -83,7 +83,7 @@ export const MovieCard = ({ movie, trendingMovie, index, favorite = false }: Mov
                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                 : `https://placehold.co/600x400/1a1a1a/ffffff.png`,
             }}
-            className={styles.movieImage}
+            className={`w-full h-[380px] rounded-lg`}
             resizeMode="cover"
             onError={() => {
               // Fallback handled in source URI, but log or handle further if needed
