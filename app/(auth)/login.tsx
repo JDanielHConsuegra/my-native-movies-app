@@ -16,7 +16,7 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, 'La contraseña debe tener al menos 6 caracteres')
     .required('La contraseña es obligatoria'),
-});
+}); 
 
 export default function LoginForm() {
   const [loginError, setLoginError] = useState<string | null>(null);

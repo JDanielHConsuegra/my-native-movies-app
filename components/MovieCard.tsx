@@ -7,19 +7,20 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 // Extract common styles for readability and maintainability
 const styles = {
   movieCard: "w-[30%] rounded-lg shadow-lg",
-  favoriteMovieCard: "w-[300px] flex flex-col gap-5 rounded shadow shadow-gray-400 border border-gray-800 p-5 rounded-lg shadow-lg",
+  favoriteMovieCard:
+    "w-[300px] flex flex-col gap-5 rounded shadow shadow-gray-400 border border-gray-800 p-5 rounded-lg shadow-lg",
   movieImage: "w-full h-52 rounded-lg",
-  movieTitle: "text-sm font-bold text-light-100 mt-2",
+  movieTitle: "font-bold text-light-100 mt-2",
   ratingContainer: "flex-row items-center justify-start gap-x-1",
-  ratingText: "text-xs text-light-200 font-bold uppercase",
+  ratingText: " text-light-200 font-bold uppercase",
   metaContainer: "flex-row items-center justify-between mt-1",
-  metaText: "text-xs text-light-300 font-medium",
+  metaText: "text-light-300 font-medium",
   trendingCard: "w-32 relative pl-5",
   trendingImage: "w-32 h-48 rounded-lg",
   rankingBadge: "absolute bottom-9 -left-3.5 px-2 py-1 rounded-full",
   rankingText: "font-bold text-white text-6xl",
   rankingImage: "size-14",
-  trendingTitle: "text-sm font-bold mt-2 text-light-200",
+  trendingTitle: "font-bold mt-2 text-light-200",
 };
 
 // Utility function for safe year extraction (error handling)
@@ -32,14 +33,19 @@ interface MovieCardProps {
   movie?: Movie;
   trendingMovie?: TrendingMovie;
   index?: number;
-  favorite?:boolean
+  favorite?: boolean;
 }
 
-export const MovieCard = ({ movie, trendingMovie, index, favorite = false }: MovieCardProps) => {
+export const MovieCard = ({
+  movie,
+  trendingMovie,
+  index,
+  favorite = false,
+}: MovieCardProps) => {
   if (movie && !favorite) {
     return (
       <Link href={`/movies/${movie?.id}`} asChild>
-        <TouchableOpacity className={ styles.movieCard}>
+        <TouchableOpacity className={styles.movieCard}>
           <Image
             source={{
               uri: movie?.poster_path
@@ -76,7 +82,7 @@ export const MovieCard = ({ movie, trendingMovie, index, favorite = false }: Mov
   if (favorite && movie) {
     return (
       <Link href={`/movies/${movie?.id}`} asChild>
-        <TouchableOpacity className={ styles.favoriteMovieCard}>
+        <TouchableOpacity className={styles.favoriteMovieCard}>
           <Image
             source={{
               uri: movie?.poster_path
@@ -87,24 +93,31 @@ export const MovieCard = ({ movie, trendingMovie, index, favorite = false }: Mov
             resizeMode="cover"
             onError={() => {
               // Fallback handled in source URI, but log or handle further if needed
-              console.warn(`failed to reload favorite movie poster of ${movie.title}`);
+              console.warn(
+                `failed to reload favorite movie poster of ${movie.title}`
+              );
             }}
           />
-          <Text numberOfLines={1} className={"text-light-100 text-center font-bold border-b border-light-200 text-lg"}>
+          <Text
+            numberOfLines={1}
+            className={
+              "text-light-100 text-center font-bold border-b border-light-200 text-lg"
+            }
+          >
             {movie?.title}
           </Text>
           <View className="flex flex-row justify-between items-center">
-          <View className={styles.ratingContainer}>
-            <Image source={icons.star} className="size-6" />
-            <Text className={"text-light-200 text-center text-lg"}>
-              {movie?.vote_average?.toFixed(1)}/10
-            </Text>
-          </View>
-          <Image
-          source={icons.save}
-          className="size-6"
-          tintColor={"#ff0000"}
-          />
+            <View className={styles.ratingContainer}>
+              <Image source={icons.star} className="size-6" />
+              <Text className={"text-light-200 text-center text-lg"}>
+                {movie?.vote_average?.toFixed(1)}/10
+              </Text>
+            </View>
+            <Image
+              source={icons.save}
+              className="size-6"
+              tintColor={"#ff0000"}
+            />
           </View>
           <View className={styles.metaContainer}>
             <Text className={"text-light-200 text-center text-lg"}>
@@ -123,7 +136,7 @@ export const MovieCard = ({ movie, trendingMovie, index, favorite = false }: Mov
         <TouchableOpacity className={styles.trendingCard}>
           <Image
             source={{
-              uri: trendingMovie.poster_url || icons.logo ,
+              uri: trendingMovie.poster_url || icons.logo,
             }}
             className={styles.trendingImage}
             resizeMode="cover"
