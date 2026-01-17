@@ -33,7 +33,7 @@ export default function Index() {
   } = useFetch(() =>
     fetchMovies({
       query: "",
-    })
+    }),
   );
 
   return (
@@ -51,7 +51,10 @@ export default function Index() {
           paddingBottom: 10,
         }}
       >
-        <Image source={icons.logo} className="size-12 mt-[64px] mb-5 mx-auto" />
+        <Image
+          source={icons.logo}
+          className="h-[100px] w-[160px] rounded mt-[70px] mb-5 mx-auto"
+        />
 
         {moviesLoading || trendingMoviesLoading ? (
           <ActivityIndicator

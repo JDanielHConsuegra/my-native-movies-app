@@ -27,7 +27,7 @@ const RegisterSchema = Yup.object().shape({
     .min(8, "La contraseña debe tener al menos 8 caracteres")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
-      "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
+      "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial",
     )
     .required("La contraseña es obligatoria"),
 });
@@ -97,7 +97,7 @@ export default function RegisterForm() {
           />
           <Image
             source={icons.logo}
-            className="size-12 mt-[64px] mb-5 mx-auto"
+            className="h-[250px] w-[380px] rounded mt-[64px] mb-5 mx-auto"
           />
           {/* Campo Nombre */}
           <Text className="text-2xl text-light-200 self-center my-10 font-bold uppercase">

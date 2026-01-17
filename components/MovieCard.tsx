@@ -6,7 +6,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 // Extract common styles for readability and maintainability
 const styles = {
-  movieCard: "w-[30%] rounded-lg shadow-lg",
+  movieCard: "w-[30%] border border-gray-800 rounded-lg shadow-lg",
   favoriteMovieCard:
     "w-[300px] flex flex-col gap-5 rounded shadow shadow-gray-400 border border-gray-800 p-5 rounded-lg shadow-lg",
   movieImage: "w-full h-52 rounded-lg",
@@ -94,7 +94,7 @@ export const MovieCard = ({
             onError={() => {
               // Fallback handled in source URI, but log or handle further if needed
               console.warn(
-                `failed to reload favorite movie poster of ${movie.title}`
+                `failed to reload favorite movie poster of ${movie.title}`,
               );
             }}
           />

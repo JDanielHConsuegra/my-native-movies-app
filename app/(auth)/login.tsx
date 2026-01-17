@@ -1,22 +1,30 @@
-import { icons } from '@/constants/icons';
-import { images } from '@/constants/images';
-import { useAuth } from '@/contexts/AuthContext';
-import { loginUser } from '@/services/appwrite';
-import { Link, useRouter } from 'expo-router';
-import { Formik } from 'formik';
-import React, { useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Button, Image, Text, TextInput, View } from 'react-native';
-import * as Yup from 'yup';
+import { icons } from "@/constants/icons";
+import { images } from "@/constants/images";
+import { useAuth } from "@/contexts/AuthContext";
+import { loginUser } from "@/services/appwrite";
+import { Link, useRouter } from "expo-router";
+import { Formik } from "formik";
+import React, { useRef, useState } from "react";
+import {
+  ActivityIndicator,
+  Animated,
+  Button,
+  Image,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import * as Yup from "yup";
 
 // 📌 Esquema de validación con Yup
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Debe ser un email válido')
-    .required('El email es obligatorio'),
+    .email("Debe ser un email válido")
+    .required("El email es obligatorio"),
   password: Yup.string()
-    .min(6, 'La contraseña debe tener al menos 6 caracteres')
-    .required('La contraseña es obligatoria'),
-}); 
+    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .required("La contraseña es obligatoria"),
+});
 
 export default function LoginForm() {
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -27,7 +35,7 @@ export default function LoginForm() {
 
   return (
     <Formik
-      initialValues={{ email: '', password: '' }}
+      initialValues={{ email: "", password: "" }}
       validationSchema={LoginSchema}
       onSubmit={async (values, { setSubmitting }) => {
         setLoginError(null);
@@ -38,10 +46,10 @@ export default function LoginForm() {
             name: userDoc.name,
             email: userDoc.email,
           };
-          setTimeout( async () => {
+          setTimeout(async () => {
             await setUser(user);
           }, 800);
-          console.log('Logged in user:', user);
+          console.log("Logged in user:", user);
           setShowAlert(true);
           Animated.timing(fadeAnim, {
             toValue: 1,
@@ -55,17 +63,25 @@ export default function LoginForm() {
               useNativeDriver: true,
             }).start(() => {
               setShowAlert(false);
-              router.replace('/(tabs)');
+              router.replace("/(tabs)");
             });
           }, 400);
         } catch (error: any) {
-          setLoginError(error.message || 'Error al iniciar sesión');
+          setLoginError(error.message || "Error al iniciar sesión");
         } finally {
           setSubmitting(false);
         }
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+        isSubmitting,
+      }) => (
         <View className="flex-1 px-8 bg-primary">
           {showAlert && (
             <Animated.View
@@ -76,24 +92,26 @@ export default function LoginForm() {
             </Animated.View>
           )}
           <Image
-                source={images.bg}
-                className="absolute w-full z-0"
-                tintColor={"1C1C1C"}
-                />
+            source={images.bg}
+            className="absolute w-full z-0"
+            tintColor={"1C1C1C"}
+          />
           <Image
-                  source={icons.logo}
-                  className="size-12 mt-[64px] mb-5 mx-auto"
-                  />
+            source={icons.logo}
+            className="h-[250px] w-[380px] rounded mt-[64px] mb-5 mx-auto"
+          />
           {/* Campo Email */}
-          <Text className='text-2xl text-light-200 self-center my-10 font-bold uppercase'>Login form</Text>
+          <Text className="text-2xl text-light-200 self-center my-10 font-bold uppercase">
+            Login form
+          </Text>
           <TextInput
             className="border text-light-200 border-gray-300 rounded-md p-3 mb-2"
             placeholder="Email"
             keyboardType="email-address"
             autoCapitalize="none"
             placeholderTextColor={"#d1d5db"}
-            onChangeText={handleChange('email')}
-            onBlur={handleBlur('email')}
+            onChangeText={handleChange("email")}
+            onBlur={handleBlur("email")}
             value={values.email}
           />
           {errors.email && touched.email && (
@@ -106,8 +124,8 @@ export default function LoginForm() {
             placeholder="Password"
             placeholderTextColor={"#d1d5db"}
             secureTextEntry
-            onChangeText={handleChange('password')}
-            onBlur={handleBlur('password')}
+            onChangeText={handleChange("password")}
+            onBlur={handleBlur("password")}
             value={values.password}
           />
           {errors.password && touched.password && (
@@ -123,12 +141,21 @@ export default function LoginForm() {
             {isSubmitting ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
-              <Button color={"#1e3a8a"} onPress={() => handleSubmit()} title="Log - in" />
+              <Button
+                color={"#1e3a8a"}
+                onPress={() => handleSubmit()}
+                title="Log - in"
+              />
             )}
-          </View> 
-          <Text className='text-light-100 mt-5 self-center'>You dont have an account yet? <Link className='font-bold underline' href='/register' >Register</Link></Text>
+          </View>
+          <Text className="text-light-100 mt-5 self-center">
+            You dont have an account yet?{" "}
+            <Link className="font-bold underline" href="/register">
+              Register
+            </Link>
+          </Text>
         </View>
       )}
-    </Formik> 
+    </Formik>
   );
 }
