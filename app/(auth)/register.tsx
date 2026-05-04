@@ -18,18 +18,21 @@ import * as Yup from "yup";
 // 📌 Esquema de validación con Yup
 const RegisterSchema = Yup.object().shape({
   name: Yup.string()
-    .min(2, "El nombre debe tener al menos 2 caracteres")
-    .required("El nombre es obligatorio"),
+    .min(2, "The name must be at least 2 characters long")
+    .required("Name is required"),
   email: Yup.string()
-    .email("Debe ser un email válido")
-    .required("El email es obligatorio"),
+    .email("The email must be a valid email address")
+    .required("Email is required"),
   password: Yup.string()
-    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .min(8, "The password must be at least 8 characters long")
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
-      "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial",
+      "The password must contain at least one uppercase letter, one lowercase letter, one number and one special character",
     )
-    .required("La contraseña es obligatoria"),
+    .required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "The passwords must match")
+    .required("Password confirmation is required"),
 });
 
 export default function RegisterForm() {
@@ -40,7 +43,7 @@ export default function RegisterForm() {
 
   return (
     <Formik
-      initialValues={{ name: "", email: "", password: "" }}
+      initialValues={{ name: "", email: "", password: "", confirmPassword: "" }}
       validationSchema={RegisterSchema}
       onSubmit={async (values, { setSubmitting }) => {
         setRegisterError(null);
@@ -97,10 +100,10 @@ export default function RegisterForm() {
           />
           <Image
             source={icons.logo}
-            className="h-[250px] w-[380px] rounded mt-[64px] mb-5 mx-auto"
+            className="h-[250px] w-[380px] rounded mt-[64px] mx-auto"
           />
           {/* Campo Nombre */}
-          <Text className="text-2xl text-light-200 self-center my-10 font-bold uppercase">
+          <Text className="text-2xl text-light-200 self-center my-5 font-bold uppercase">
             Register form
           </Text>
           <TextInput
@@ -131,19 +134,40 @@ export default function RegisterForm() {
             <Text className="text-red-500 mb-2">{errors.email}</Text>
           )}
 
-          {/* Campo Contraseña */}
-          <TextInput
-            className="border text-gray-200 border-gray-300 rounded-md p-3 mb-2"
-            placeholder="Password"
-            placeholderTextColor={"#d1d5db"}
-            secureTextEntry
-            onChangeText={handleChange("password")}
-            onBlur={handleBlur("password")}
-            value={values.password}
-          />
-          {errors.password && touched.password && (
-            <Text className="text-red-500 mb-2">{errors.password}</Text>
-          )}
+          {/* Campo Contraseña y verificacion */}
+          <View className="flex flex-row justify-between gap-1">
+            <View className="w-[48%]">
+              <TextInput
+                className="border text-gray-200 border-gray-300 rounded-md p-3 mb-2"
+                placeholder="Password"
+                placeholderTextColor={"#d1d5db"}
+                secureTextEntry
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+              />
+              {errors.password && touched.password && (
+                <Text className="text-red-500 mb-2">{errors.password}</Text>
+              )}
+            </View>
+            {/* Campo Verificacion Contraseña */}
+            <View className="w-[48%]">
+              <TextInput
+                className="border text-gray-200 border-gray-300 rounded-md p-3 mb-2"
+                placeholder="Confirm password"
+                placeholderTextColor={"#d1d5db"}
+                secureTextEntry
+                onChangeText={handleChange("confirmPassword")}
+                onBlur={handleBlur("confirmPassword")}
+                value={values.confirmPassword}
+              />
+              {errors.confirmPassword && touched.confirmPassword && (
+                <Text className="text-red-500 text-center mb-2">
+                  {errors.confirmPassword}
+                </Text>
+              )}
+            </View>
+          </View>
 
           {registerError && (
             <Text className="text-red-500 mb-2">{registerError}</Text>

@@ -2,7 +2,13 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { Link } from "expo-router";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
+
 
 // Extract common styles for readability and maintainability
 const styles = {
@@ -113,11 +119,15 @@ export const MovieCard = ({
                 {movie?.vote_average?.toFixed(1)}/10
               </Text>
             </View>
-            <Image
-              source={icons.save}
-              className="size-6"
-              tintColor={"#ff0000"}
-            />
+            <View className="flex flex-row items-end gap-4">
+              <View className="flex flex-col items-center gap-1">
+                <Image
+                  source={icons.save}
+                  className="size-7"
+                  tintColor={"#ff0000"}
+                />
+              </View>
+            </View>
           </View>
           <View className={styles.metaContainer}>
             <Text className={"text-light-200 text-center text-lg"}>
