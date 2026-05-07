@@ -4,7 +4,7 @@ import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { useLogged } from "@/hooks/logged";
 import { fetchMovies } from "@/services/api";
-import { getTrendingMovies } from "@/services/appwrite";
+import { getTrendingMovies } from "@/services/firebase";
 import useFetch from "@/services/useFetch";
 import { useRouter } from "expo-router";
 import {

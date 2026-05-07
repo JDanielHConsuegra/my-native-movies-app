@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { saveMovie } from '../services/appwrite';
+import { saveMovie } from '../services/firebase';
 
 interface FavoritesContextType {
   favoriteIds: string[];
@@ -17,7 +17,7 @@ export const useFavorites = () => {
   return context;
 };
 
-export const FavoritesProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
 
   const loadFavorites = async () => {

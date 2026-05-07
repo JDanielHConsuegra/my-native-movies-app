@@ -1,7 +1,7 @@
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { useAuth } from "@/contexts/AuthContext";
-import { loginUser } from "@/services/appwrite";
+import { loginUser } from "@/services/firebase";
 import { Link, useRouter } from "expo-router";
 import { Formik } from "formik";
 import React, { useRef, useState } from "react";
@@ -41,15 +41,10 @@ export default function LoginForm() {
         setLoginError(null);
         try {
           const userDoc = await loginUser(values.email, values.password);
-          const user: User = {
-            id: userDoc.$id,
-            name: userDoc.name,
-            email: userDoc.email,
-          };
           setTimeout(async () => {
-            await setUser(user);
+            await setUser(userDoc);
           }, 800);
-          console.log("Logged in user:", user);
+          console.log("Logged in user:", userDoc);
           setShowAlert(true);
           Animated.timing(fadeAnim, {
             toValue: 1,

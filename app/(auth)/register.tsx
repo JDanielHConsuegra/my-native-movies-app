@@ -1,6 +1,6 @@
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
-import { registerUser } from "@/services/appwrite";
+import { registerUser } from "@/services/firebase";
 import { Link, useRouter } from "expo-router";
 import { Formik } from "formik";
 import React, { useRef, useState } from "react";
